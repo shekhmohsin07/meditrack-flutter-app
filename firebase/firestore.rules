@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // users/{uid}/{collection}/{docId}: only the signed-in owner can touch their own data.
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /{collection}/{docId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.id == docId
+          && request.resource.data.updated_at is string
+          && request.resource.data.keys().size() < 40;
+        // Deletions are "tombstones" (updated documents with deleted_at set), never hard deletes.
+        allow delete: if false;
+      }
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,98 @@
+erDiagram
+    users ||--o{ family_members : has
+    users ||--o{ medicines : owns
+    family_members |o--o{ medicines : "takes"
+    medicines ||--o{ schedules : "has"
+    schedules ||--o{ schedule_times : "has"
+    medicines ||--o{ medicine_logs : "dose records"
+    schedule_times |o--o{ medicine_logs : "planned by"
+    medicines ||--o| inventory : "stock of"
+    inventory ||--o{ stock_history : "movements"
+    medicine_logs |o--o| stock_history : "deducts once"
+    users ||--o{ health_records : records
+    users ||--o{ doctors : knows
+    doctors |o--o{ appointments : "seen at"
+    users ||--o{ appointments : books
+    users ||--o{ allergies : has
+    users ||--o{ emergency_contacts : has
+    users ||--o{ prescriptions : stores
+    users ||--o{ notifications : receives
+    medicines |o--o{ notifications : about
+
+    users { text id PK
+            text email
+            text display_name }
+    family_members { text id PK
+            text user_id FK
+            text name
+            text relationship
+            int caregiver_consent
+            text consent_at }
+    medicines { text id PK
+            text user_id FK
+            text member_id FK
+            text name
+            text dosage
+            text type
+            text food_instruction
+            text start_date
+            text end_date
+            text status }
+    schedules { text id PK
+            text medicine_id FK
+            text frequency
+            text days_of_week
+            int is_paused }
+    schedule_times { text id PK
+            text schedule_id FK
+            text time_of_day }
+    medicine_logs { text id PK
+            text medicine_id FK
+            text scheduled_at "UNIQUE with medicine_id"
+            text action_at
+            text status }
+    inventory { text id PK
+            text medicine_id FK "UNIQUE"
+            real initial_quantity
+            real remaining_quantity
+            real low_stock_threshold
+            real dose_quantity
+            text expiry_date }
+    stock_history { text id PK
+            text inventory_id FK
+            text log_id FK "UNIQUE"
+            real change_amount
+            text reason }
+    health_records { text id PK
+            text user_id FK
+            text member_id FK
+            text type
+            real value1
+            real value2
+            text unit
+            text recorded_at }
+    appointments { text id PK
+            text user_id FK
+            text doctor_id FK
+            text appointment_at
+            int reminder_minutes
+            text status }
+    doctors { text id PK
+            text user_id FK
+            text name }
+    allergies { text id PK
+            text user_id FK
+            text name }
+    emergency_contacts { text id PK
+            text user_id FK
+            text name
+            text phone }
+    prescriptions { text id PK
+            text user_id FK
+            text image_path
+            text remote_url }
+    notifications { text id PK
+            text user_id FK
+            int notification_int_id "UNIQUE"
+            text scheduled_at
+            text status }

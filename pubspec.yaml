@@ -1,0 +1,56 @@
+name: meditrack
+description: MediTrack - Smart Medicine Reminder & Personal Health Management System.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Let Flutter choose the intl version it needs (flutter_localizations pins it).
+  intl: any
+  flutter_riverpod: ^2.5.1
+  sqflite: ^2.3.3
+  path: ^1.9.0
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+  flutter_local_notifications: ^17.2.3
+  timezone: ^0.9.4
+  connectivity_plus: ^6.0.5
+  fl_chart: ^0.69.0
+  uuid: ^4.5.1
+  image_picker: ^1.1.2
+  pdf: ^3.11.1
+  printing: ^5.13.3
+  shared_preferences: ^2.3.2
+  path_provider: ^2.1.4
+  google_fonts: ^6.2.1
+  table_calendar: ^3.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  sqflite_common_ffi: ^2.3.3
+  integration_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 23
+  adaptive_icon_background: "#aeccf8"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
+  remove_alpha_ios: true

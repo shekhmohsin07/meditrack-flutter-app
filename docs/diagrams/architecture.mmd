@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph PRES[Presentation layer - Flutter, Material 3]
+        SCR[Screens and widgets<br/>features/*/presentation]
+        THEME[Theme and localisation<br/>core/theme, l10n]
+    end
+    subgraph STATE[State layer - Riverpod]
+        PROV[Providers and notifiers]
+    end
+    subgraph DOMAIN[Domain layer]
+        MODEL[Models and pure logic<br/>ScheduleLogic, AdherenceStats,<br/>SyncConflict, validators]
+    end
+    subgraph DATA[Data layer]
+        REPO[Repositories<br/>features/*/data]
+        DB[(SQLite via sqflite<br/>17 tables)]
+        QUEUE[(sync_queue)]
+    end
+    subgraph SERVICES[Services - core/]
+        NOTIF[NotificationService +<br/>ReminderCoordinator]
+        SYNC[SyncEngine +<br/>SyncController]
+        IMG[ImageService +<br/>StorageService]
+        PDF[PdfReportBuilder]
+        CONN[ConnectivityService]
+    end
+    subgraph EXT[External]
+        ANDROID[Android AlarmManager<br/>and notifications]
+        AUTH[Firebase Authentication]
+        FS[(Cloud Firestore)]
+        ST[(Firebase Storage)]
+    end
+
+    SCR --> PROV --> REPO --> DB
+    SCR --> THEME
+    PROV --> MODEL
+    REPO --> QUEUE
+    REPO --> MODEL
+    PROV --> NOTIF --> ANDROID
+    ANDROID -- "action buttons" --> NOTIF --> REPO
+    SYNC --> QUEUE
+    SYNC --> DB
+    SYNC --> FS
+    SYNC --> CONN
+    IMG --> ST
+    PROV --> AUTH
+    PROV --> PDF --> REPO

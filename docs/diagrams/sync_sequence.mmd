@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant UI as Screen
+    participant R as Repository
+    participant DB as SQLite
+    participant Q as sync_queue
+    participant S as SyncEngine
+    participant C as Firestore
+
+    UI->>R: save medicine
+    R->>DB: INSERT / UPDATE (transaction)
+    R->>Q: upsert one entry for the row
+    Note over UI,DB: Works with no internet
+    S->>Q: read entries (attempts < 8, owner = signed-in user)
+    S->>C: get(users/uid/medicines/id)
+    alt cloud copy is newer
+        S->>DB: apply cloud copy, drop queue entry
+    else local copy wins
+        S->>C: set(document)
+        S->>DB: sync_status = synced
+        S->>Q: delete entry
+    end
+    S->>C: changedSince(checkpoint)
+    C-->>S: changed documents
+    S->>DB: merge with conflict rules, save checkpoint

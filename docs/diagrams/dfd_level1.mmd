@@ -1,0 +1,41 @@
+flowchart LR
+    U[/User/]
+    FB[/Firebase/]
+    OS[/Android OS/]
+
+    P1((1.0<br/>Authenticate))
+    P2((2.0<br/>Manage medicines<br/>and schedules))
+    P3((3.0<br/>Reminders))
+    P4((4.0<br/>Track intake))
+    P5((5.0<br/>Manage stock))
+    P6((6.0<br/>Health records and<br/>appointments))
+    P7((7.0<br/>Reports))
+    P8((8.0<br/>Synchronise))
+
+    D1[(D1 SQLite database)]
+    D2[(D2 Firestore)]
+    D3[(D3 Firebase Storage)]
+
+    U -- "email, password" --> P1
+    P1 -- "session" --> U
+    P1 <--> FB
+    U -- "medicine and schedule details" --> P2
+    P2 <--> D1
+    D1 -- "schedules" --> P3
+    P3 -- "notification requests" --> OS
+    OS -- "dose actions" --> P3
+    U -- "taken / skipped" --> P4
+    P3 -- "dose actions" --> P4
+    P4 <--> D1
+    P4 -- "taken dose" --> P5
+    U -- "stock, expiry" --> P5
+    P5 <--> D1
+    U -- "readings, appointments, allergies" --> P6
+    P6 <--> D1
+    P6 -- "appointment reminders" --> OS
+    D1 -- "history, records" --> P7
+    P7 -- "PDF, charts" --> U
+    D1 -- "queued changes" --> P8
+    P8 <--> D2
+    P8 -- "photos" --> D3
+    P8 -- "downloaded changes" --> D1

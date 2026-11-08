@@ -1,0 +1,29 @@
+flowchart LR
+    %% Level 2 of process 3.0 Reminders + 4.0 Track intake + 5.0 Manage stock
+    D1[(D1 SQLite)]
+    OS[/Android OS/]
+    U[/User/]
+
+    P31((3.1<br/>Compute upcoming<br/>doses, 7 days))
+    P32((3.2<br/>Schedule<br/>notifications))
+    P33((3.3<br/>Handle notification<br/>action))
+    P34((3.4<br/>Mark missed<br/>doses))
+    P41((4.1<br/>Record dose<br/>once))
+    P51((5.1<br/>Deduct stock<br/>once))
+    P35((3.5<br/>Caregiver<br/>missed alert))
+
+    D1 -- "schedules, times, medicines" --> P31
+    P31 -- "dose list" --> P32
+    P32 -- "notification id = hash(medicine, time)" --> OS
+    P32 -- "notification history" --> D1
+    OS -- "Taken / Snooze / Skip" --> P33
+    U -- "Mark taken (app)" --> P41
+    P33 --> P41
+    P33 -- "snooze: new reminder +10 min" --> OS
+    P41 -- "unique log per dose" --> D1
+    P41 -- "status = taken" --> P51
+    P51 -- "unique log_id, remaining quantity" --> D1
+    D1 -- "doses without answer" --> P34
+    P34 -- "status = missed (never overrides taken/skipped)" --> P41
+    D1 -- "missed doses of consenting members" --> P35
+    P35 -- "one local notification" --> OS

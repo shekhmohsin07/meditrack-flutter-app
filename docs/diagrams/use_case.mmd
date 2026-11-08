@@ -1,0 +1,34 @@
+flowchart LR
+    U([User])
+    CG([Caregiver<br/>same account, family profile])
+    FB([Firebase<br/>Auth - Firestore - Storage])
+    AN([Android OS<br/>notifications and alarms])
+
+    subgraph MT[MediTrack]
+        direction TB
+        UC1(Register / log in / log out)
+        UC2(Reset password)
+        UC3(Manage medicines)
+        UC4(Create and edit schedules)
+        UC5(Receive medicine reminders)
+        UC6(Mark dose taken / snooze / skip)
+        UC7(View history, adherence, calendar)
+        UC8(Manage stock and expiry)
+        UC9(Record health data)
+        UC10(Manage doctor appointments)
+        UC11(Manage allergies, contacts, prescriptions)
+        UC12(Manage family profiles and consent)
+        UC13(Export, print, share PDF report)
+        UC14(Synchronise with the cloud)
+        UC15(Change language and theme)
+    end
+
+    U --> UC1 & UC2 & UC3 & UC4 & UC6 & UC7 & UC8 & UC9 & UC10 & UC11 & UC12 & UC13 & UC15
+    CG --> UC12 & UC7
+    UC5 --> U
+    AN --> UC5
+    UC1 --- FB
+    UC14 --- FB
+    UC3 -.->|includes| UC8
+    UC6 -.->|includes| UC8
+    UC12 -.->|alerts only after consent| UC5

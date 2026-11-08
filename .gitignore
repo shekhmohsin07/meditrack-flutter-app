@@ -1,0 +1,13 @@
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+# Firebase / signing secrets - never commit
+android/app/google-services.json
+android/key.properties
+*.jks
+*.keystore
+lib/firebase_options.dart

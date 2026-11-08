@@ -1,0 +1,12 @@
+flowchart LR
+    U[/User/]
+    FB[/Firebase cloud/]
+    OS[/Android notification system/]
+    SYS((0<br/>MediTrack<br/>system))
+
+    U -- "credentials, medicines, schedules,<br/>dose actions, health data, settings" --> SYS
+    SYS -- "dashboard, history, statistics,<br/>PDF reports, alerts" --> U
+    SYS -- "scheduled reminders" --> OS
+    OS -- "Taken / Snooze / Skip actions" --> SYS
+    SYS -- "sign-in requests, changed records, images" --> FB
+    FB -- "auth result, cloud changes" --> SYS
